@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Donate — My Site</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#7c3aed; --muted:#94a3b8; --glass:rgba(255,255,255,0.03);
+      --radius:14px; --pad:18px;
+      color-scheme: dark;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:linear-gradient(180deg,#071022 0%, #07142a 100%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .wrap{max-width:980px;margin:40px auto;padding:20px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+    header h1{font-size:20px;margin:0}
+    header a{color:var(--muted);text-decoration:none;font-size:14px;padding:8px 12px;border-radius:10px;background:var(--glass)}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:20px}
+    @media (max-width:860px){ .grid{grid-template-columns:1fr} }
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:var(--pad); border-radius:var(--radius); box-shadow: 0 6px 20px rgba(2,6,23,0.6); }
+    .lead{color:var(--muted);margin-top:6px;font-size:14px}
+    .tiers{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+    .tier{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:12px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02)}
+    .tier .left{display:flex;flex-direction:column}
+    .tier b{font-size:15px}
+    .price{font-weight:700}
+    .donate-actions{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+    .btn{
+      display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;text-align:center;font-weight:600;
+      background:linear-gradient(90deg,var(--accent),#5b21b6);color:white;border:none;cursor:pointer;
+      box-shadow:0 6px 18px rgba(92,33,182,0.25);
+    }
+    .alt{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);box-shadow:none;font-weight:600}
+    .progress-wrap{margin-top:18px}
+    .progress{height:12px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#4f46e5);width:60%}
+    .small{font-size:13px;color:var(--muted)}
+    .methods{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+    .method{display:flex;gap:10px;align-items:center}
+    .method img{width:36px;height:36px;border-radius:8px;object-fit:cover}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    .center{display:flex;align-items:center;gap:8px}
+    .share{display:flex;gap:8px;margin-top:10px}
+    .pill{background:rgba(255,255,255,0.02);padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.02)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Support this site</h1>
+        <div class="lead">Keep the servers running, buy tools, and pay for new features.</div>
+      </div>
+      <a href="index.html">← Back</a>
+    </header>
+
+    <div class="grid">
+      <main class="card">
+        <h2 style="margin:0 0 6px 0">Why donations help</h2>
+        <p class="small">Donations go to hosting costs, domain renewal, asset purchases and improvements. Any amount helps — thank you!</p>
+
+        <div class="tiers" aria-hidden="false">
+          <label class="tier" onclick="fillAmount(5)">
+            <div class="left"><b>$5 — Coffee</b><div class="small">Helps buy a coffee for a hacker night</div></div>
+            <div class="price">$5</div>
+          </label>
+
+          <label class="tier" onclick="fillAmount(10)">
+            <div class="left"><b>$10 — Supporter</b><div class="small">Covers a month of CDN bandwidth</div></div>
+            <div class="price">$10</div>
+          </label>
+
+          <label class="tier" onclick="fillAmount(25)">
+            <div class="left"><b>$25 — Sponsor</b><div class="small">Helps fund a new feature</div></div>
+            <div class="price">$25</div>
+          </label>
+        </div>
+
+        <div style="margin-top:14px">
+          <div class="small">Custom amount</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <input id="amt" type="number" min="1" placeholder="Enter amount (USD)"
+                   style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit">
+            <button class="btn" onclick="preparePay()">Donate</button>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="small">Monthly goal</div>
+            <div class="small"><strong id="collected">$420</strong> / $700</div>
+          </div>
+          <div class="progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60" style="margin-top:8px">
+            <i id="bar" style="width:60%"></i>
+          </div>
+          <div class="small" style="margin-top:8px">Thanks to everyone who contributed — you rock.</div>
+        </div>
+
+        <footer>
+          <div class="small">Prefer a different method? See the buttons on the right for PayPal, Ko-fi or Buy Me a Coffee.</div>
+        </footer>
+      </main>
+
+      <aside class="card">
+        <h3 style="margin:0 0 8px 0">Donate methods</h3>
+        <div class="methods">
+          <div class="method">
+            <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_150x38.png" alt="PayPal">
+            <div style="flex:1">
+              <div style="font-weight:700">PayPal</div>
+              <div class="small">Fast and secure. Use your PayPal account or card.</div>
+            </div>
+          </div>
+
+          <div class="method">
+            <img src="https://cdn.ko-fi.com/cdn/kofi3.png" alt="Ko-fi">
+            <div style="flex:1">
+              <div style="font-weight:700">Ko-fi</div>
+              <div class="small">One-off support, no fees for basic donations.</div>
+            </div>
+          </div>
+
+          <div class="method">
+            <img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy Me a Coffee" style="width:40px;">
+            <div style="flex:1">
+              <div style="font-weight:700">Buy Me a Coffee</div>
+              <div class="small">Recurring options and memberships available.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="donate-actions">
+          <!-- PayPal: Replace YOUR_BUTTON_ID with your PayPal hosted button id or use a direct donate link -->
+          <form id="paypalForm" action="https://www.paypal.com/donate" method="post" target="_blank">
+            <!-- To use a hosted button id, set hosted_button_id. Alternatively, you can use a link like https://www.paypal.com/donate?hosted_button_id=XXXX -->
+            <input type="hidden" name="hosted_button_id" value="YOUR_PAYPAL_BUTTON_ID">
+            <button class="btn" type="submit">Donate with PayPal</button>
+          </form>
+
+          <!-- Ko-fi / BuyMeACoffee simple links -->
+          <a id="kofiBtn" class="btn alt" href="https://ko-fi.com/YOUR_KOFI" target="_blank" rel="noopener">Donate on Ko-fi</a>
+          <a id="bmcBtn" class="btn alt" href="https://www.buymeacoffee.com/YOUR_BMC" target="_blank" rel="noopener">Buy me a coffee</a>
+
+          <div style="margin-top:6px" class="small">Tip: replace the links above with your own PayPal / Ko-fi / BuyMeACoffee URLs.</div>
+
+          <div class="share" aria-hidden="false">
+            <div class="pill small center">Share</div>
+            <a class="pill small" href="#" onclick="copyLink()">Copy link</a>
+            <a class="pill small" href="https://twitter.com/intent/tweet?text=Support+this+site+%F0%9F%92%95+https%3A%2F%2Fyour-username.github.io%2Fdonate.html" target="_blank">Tweet</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // small helpers
+    function fillAmount(v){ document.getElementById('amt').value = v; }
+    function preparePay(){
+      const a = Number(document.getElementById('amt').value) || 0;
+      if(a <= 0){ alert('Enter a valid amount (USD)'); return; }
+      // open PayPal donate page with amount (uses non-hosted link)
+      // Replace YOUR_PAYPAL_BUTTON_ID with hosted button id for better UX.
+      const url = 'https://www.paypal.com/donate?amount=' + encodeURIComponent(a) + '&currency_code=USD';
+      window.open(url, '_blank');
+    }
+
+    // fake progress (you'll want to update this dynamically on a server or via GitHub data)
+    // Example of updating the bar programmatically:
+    (function(){
+      // these values could be updated by you manually or via an external script
+      const collected = 420; // replace with your real collected amount
+      const goal = 700;      // replace with your real goal
+      const pct = Math.min(100, Math.round((collected/goal)*100));
+      document.getElementById('collected').textContent = '$' + collected;
+      document.getElementById('bar').style.width = pct + '%';
+      document.getElementById('bar').parentElement.setAttribute('aria-valuenow', pct);
+    })();
+
+    function copyLink(){
+      const link = location.origin + location.pathname.replace(/[^\/]*$/, '') + 'donate.html';
+      navigator.clipboard?.writeText(link).then(()=>alert('Link copied!'), ()=>alert('Copy failed.'))
+    }
+  </script>
+</body>
+</html>
